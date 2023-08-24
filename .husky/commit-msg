@@ -1,0 +1,19 @@
+#!/bin/sh
+
+commit_msg_file=$1
+commit_msg=`cat $commit_msg_file`
+
+red='\033[1;91m'
+green='\033[1;92m'
+reset='\033[0m'
+
+if ! echo "$commit_msg" | grep -E '^(feat|fix|chore|refact|conflict)\((ADM[0-9]+|release|merge)\): .*' >/dev/null ; then
+  echo -e "${red}Aborting commit. Your commit message is invalid.${reset}"
+  echo -e "It should be in the format:"
+  echo -e "${green}\"feat|fix|chore|refact(ADD##): commit message\",${reset}"
+  echo -e "In case of release related commits the allowed formats are:"
+  echo -e "${green}\"feat|fix|chore|refact(release): commit message\",${reset}"
+  echo -e "In case of conflict of a merge it should be in the format:"
+  echo -e "${green}\"conflict(merge): commit message\"${reset}"
+  exit 1
+fi
